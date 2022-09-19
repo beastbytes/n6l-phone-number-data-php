@@ -12,13 +12,13 @@
             "source": {
                 "type": "git",
                 "url": "git@192.168.0.80:BeastBytes/n6l-phone-number-data.git",
-                "reference": "6263f77a828b823328afb43fcf02cad7915dd3b5"
+                "reference": "11653fc392456e0db4faccaf68634617262d9122"
             },
             "dist": {
                 "type": "tar",
-                "url": "https://acappella.saluki/archives/beastbytes/n6l-phone-number-data/dev-master/6263f77a828b823328afb43fcf02cad7915dd3b5.tar.gz",
-                "reference": "6263f77a828b823328afb43fcf02cad7915dd3b5",
-                "shasum": "139cddef2b76a66b84314827467e1f8857b33963"
+                "url": "https://acappella.saluki/archives/beastbytes/n6l-phone-number-data/dev-master/11653fc392456e0db4faccaf68634617262d9122.tar.gz",
+                "reference": "11653fc392456e0db4faccaf68634617262d9122",
+                "shasum": "569ac9b998f0d9455ab6ab36f2335c9d24e51de1"
             },
             "require": {
                 "php": "^8.0"
@@ -26,7 +26,7 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "BeastBytes\\N6lPhoneNumber\\": "src"
+                    "BeastBytes\\PhoneNumber\\N6l\\": "src"
                 }
             },
             "license": [

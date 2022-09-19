@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use BeastBytes\N6lPhoneNumber\PHP\N6lPhoneNumberData;
+use BeastBytes\PhoneNumber\N6l\PHP\N6lPhoneNumberData;
 use PHPUnit\Framework\TestCase;
 
 class N6LPhoneNumberDataTest extends TestCase

@@ -24,7 +24,7 @@
     },
     "autoload": {
         "psr-4": {
-            "BeastBytes\\N6lPhoneNumber\\PHP\\": "src"
+            "BeastBytes\\PhoneNumber\\N6l\\PHP\\": "src"
         }
     },
     "autoload-dev": {

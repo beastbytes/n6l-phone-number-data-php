@@ -6,9 +6,9 @@
 
 declare(strict_types=1);
 
-namespace BeastBytes\N6lPhoneNumber\PHP;
+namespace BeastBytes\PhoneNumber\N6l\PHP;
 
-use BeastBytes\N6lPhoneNumber\N6lPhoneNumberDataInterface;
+use BeastBytes\PhoneNumber\N6l\N6lPhoneNumberDataInterface;
 use InvalidArgumentException;
 use RuntimeException;
 
