@@ -14,16 +14,23 @@ use RuntimeException;
 
 final class N6lPhoneNumberData implements N6lPhoneNumberDataInterface
 {
+    public const COUNTRY_DOES_NOT_HAVE_A_REPLACEMENT_EXCEPTION_MESSAGE =
+        'Country {country} does not have a replacement';
+    public const COUNTRY_NOT_FOUND_EXCEPTION_MESSAGE =
+        'Country {country} not found in list of national phone number formats';
+    public const INVALID_N6L_PHONE_NUMBER_DATA_EXCEPTION_MESSAGE
+        = '`$n6lPhoneNumberData` must be an array of national phone number data, a path to a file that returns an array of national phone number data, or `null` to use local data';
+
     public function __construct(private array|string|null $n6lPhoneNumberData = null)
     {
         if ($this->n6lPhoneNumberData === null) {
-            $this->n6lPhoneNumberData = require 'data.php';
+            $this->n6lPhoneNumberData = require dirname(__DIR__) . '/data/data.php';
         } elseif (is_string($this->n6lPhoneNumberData)) {
             $this->n6lPhoneNumberData = require $this->n6lPhoneNumberData;
         }
 
         if (!is_array($this->n6lPhoneNumberData)) {
-            throw new InvalidArgumentException('`$n6lPhoneNumberData` must be an array of national phone number data, a path to a file that returns an array of national phone number data, or `null` to use local data');
+            throw new InvalidArgumentException(self::INVALID_N6L_PHONE_NUMBER_DATA_EXCEPTION_MESSAGE);
         }
     }
 
@@ -44,7 +51,7 @@ final class N6lPhoneNumberData implements N6lPhoneNumberDataInterface
         }
 
         throw new InvalidArgumentException(strtr(
-            'Country {country} not found in list of national phone number formats',
+            self::COUNTRY_NOT_FOUND_EXCEPTION_MESSAGE,
             ['{country}' => $country]
         ));
     }
@@ -58,14 +65,14 @@ final class N6lPhoneNumberData implements N6lPhoneNumberDataInterface
 
             throw new RuntimeException(
                 strtr(
-                    'Country {country} does not have a replacement',
+                    self::COUNTRY_DOES_NOT_HAVE_A_REPLACEMENT_EXCEPTION_MESSAGE,
                     ['{country}' => $country]
                 )
             );
         }
 
         throw new InvalidArgumentException(strtr(
-           'Country {country} not found in list of national phone number formats',
+            self::COUNTRY_NOT_FOUND_EXCEPTION_MESSAGE,
            ['{country}' => $country]
        ));
     }
@@ -77,7 +84,7 @@ final class N6lPhoneNumberData implements N6lPhoneNumberDataInterface
         }
 
         throw new InvalidArgumentException(strtr(
-            'Country {country} not found in list of national phone number formats',
+            self::COUNTRY_NOT_FOUND_EXCEPTION_MESSAGE,
             ['{country}' => $country]
         ));
     }
