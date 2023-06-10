@@ -14,11 +14,11 @@ use RuntimeException;
 
 final class N6lPhoneNumberData implements N6lPhoneNumberDataInterface
 {
-    public const COUNTRY_DOES_NOT_HAVE_A_REPLACEMENT_EXCEPTION_MESSAGE =
+    public const NO_REPLACEMENT_EXCEPTION_MESSAGE =
         'Country {country} does not have a replacement';
     public const COUNTRY_NOT_FOUND_EXCEPTION_MESSAGE =
         'Country {country} not found in list of national phone number formats';
-    public const INVALID_N6L_PHONE_NUMBER_DATA_EXCEPTION_MESSAGE
+    public const INVALID_DATA_EXCEPTION_MESSAGE
         = '`$n6lPhoneNumberData` must be an array of national phone number data, a path to a file that returns an array of national phone number data, or `null` to use local data';
 
     public function __construct(private array|string|null $n6lPhoneNumberData = null)
@@ -29,8 +29,8 @@ final class N6lPhoneNumberData implements N6lPhoneNumberDataInterface
             $this->n6lPhoneNumberData = require $this->n6lPhoneNumberData;
         }
 
-        if (!is_array($this->n6lPhoneNumberData)) {
-            throw new InvalidArgumentException(self::INVALID_N6L_PHONE_NUMBER_DATA_EXCEPTION_MESSAGE);
+        if (!is_array($this->n6lPhoneNumberData) || count($this->n6lPhoneNumberData) === 0) {
+            throw new InvalidArgumentException(self::INVALID_DATA_EXCEPTION_MESSAGE);
         }
     }
 
@@ -58,34 +58,28 @@ final class N6lPhoneNumberData implements N6lPhoneNumberDataInterface
 
     public function getReplacement(string $country): string
     {
-        if ($this->hasCountry($country)) {
-            if (count($this->n6lPhoneNumberData[$country]) === 2) {
-                return $this->n6lPhoneNumberData[$country]['replacement'];
-            }
-
-            throw new RuntimeException(
-                strtr(
-                    self::COUNTRY_DOES_NOT_HAVE_A_REPLACEMENT_EXCEPTION_MESSAGE,
-                    ['{country}' => $country]
-                )
-            );
+        if (!$this->hasReplacement($country)) {
+            throw new RuntimeException(strtr(
+                self::NO_REPLACEMENT_EXCEPTION_MESSAGE,
+                ['{country}' => $country]
+            ));
         }
 
-        throw new InvalidArgumentException(strtr(
-            self::COUNTRY_NOT_FOUND_EXCEPTION_MESSAGE,
-           ['{country}' => $country]
-       ));
+        return $this->n6lPhoneNumberData[$country]['replacement'];
     }
 
     public function hasReplacement(string $country): bool
     {
-        if ($this->hasCountry($country)) {
-            return count($this->n6lPhoneNumberData[$country]) === 2;
+        if (!$this->hasCountry($country)) {
+            throw new InvalidArgumentException(strtr(
+                self::COUNTRY_NOT_FOUND_EXCEPTION_MESSAGE,
+                ['{country}' => $country]
+            ));
         }
 
-        throw new InvalidArgumentException(strtr(
-            self::COUNTRY_NOT_FOUND_EXCEPTION_MESSAGE,
-            ['{country}' => $country]
-        ));
+        return array_key_exists(
+            'replacement',
+            $this->n6lPhoneNumberData[$country]
+        );
     }
 }

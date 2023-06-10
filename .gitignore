@@ -27,11 +27,7 @@ composer.phar
 
 # phpunit itself is not needed
 phpunit.phar
-.phpunit.result.cache
-
-# local phpunit config
-/phpunit.xml
-/phpunit.xml.dist
+/.phpunit.cache
 
 # NPM packages
 /node_modules
