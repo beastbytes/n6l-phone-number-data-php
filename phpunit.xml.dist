@@ -16,7 +16,8 @@
 
     <testsuites>
         <testsuite name="Phone Number Data PHP tests">
-            <directory suffix=".php">./tests/unit</directory>
+            <directory suffix=".php">./tests</directory>
+            <exclude>./tests/data</exclude>
         </testsuite>
     </testsuites>
 

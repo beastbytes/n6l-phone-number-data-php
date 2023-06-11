@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace BeastBytes\PhoneNumber\N6l\PHP\Tests\unit;
+namespace BeastBytes\PhoneNumber\N6l\PHP\Tests;
 
 use BeastBytes\PhoneNumber\N6l\PHP\N6lPhoneNumberData;
 use InvalidArgumentException;
@@ -25,7 +25,7 @@ class N6LPhoneNumberDataTest extends TestCase
     public static function init(): void
     {
         self::$testClass = new N6lPhoneNumberData();
-        self::$dataFilename = dirname(__DIR__, 2) . '/data/data.php';
+        self::$dataFilename = dirname(__DIR__) . '/data/data.php';
     }
 
     public function test_constructor_with_null()
@@ -64,7 +64,7 @@ class N6LPhoneNumberDataTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(N6lPhoneNumberData::INVALID_DATA_EXCEPTION_MESSAGE);
-        new N6lPhoneNumberData(dirname(__DIR__) . "/data/$data.php");
+        new N6lPhoneNumberData(__DIR__ . "/data/$data.php");
     }
 
     #[DataProvider('goodCountriesProvider')]
@@ -141,7 +141,7 @@ class N6LPhoneNumberDataTest extends TestCase
 
     public static function goodCountriesProvider(): \Generator
     {
-        self::$n6lPhoneNumberData = require dirname(__DIR__, 2) . '/data/data.php';
+        self::$n6lPhoneNumberData = require dirname(__DIR__) . '/data/data.php';
 
         foreach (array_keys(self::$n6lPhoneNumberData) as $country) {
             yield $country => [$country, count(self::$n6lPhoneNumberData[$country]) === 2];
@@ -180,7 +180,7 @@ class N6LPhoneNumberDataTest extends TestCase
     {
         $data = [];
 
-        self::$n6lPhoneNumberData = require dirname(__DIR__, 2) . '/data/data.php';
+        self::$n6lPhoneNumberData = require dirname(__DIR__) . '/data/data.php';
         $countries = array_rand(self::$n6lPhoneNumberData, random_int(1, count(self::$n6lPhoneNumberData)));
 
         foreach ($countries as $country) {
