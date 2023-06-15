@@ -157,9 +157,9 @@ class N6LPhoneNumberDataTest extends TestCase
                 'too short' => ['G'],
                 'too long' => ['GBRT'],
                 'number string' => ['12']
-            ] as $name => $value
+            ] as $name => $data
         ) {
-            yield $name => $value;
+            yield $name => $data;
         }
     }
 
