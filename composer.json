@@ -18,7 +18,8 @@
         "beastbytes/n6l-phone-number-data": "dev-master"
     },
     "require-dev": {
-        "phpunit/phpunit": "^10.",
+        "consolidation/robo": "^4.0",
+        "phpunit/phpunit": "^10.0",
         "roave/infection-static-analysis-plugin": "^1.0",
         "roave/security-advisories": "dev-latest",
         "spatie/phpunit-watcher": "^1.0",
@@ -37,6 +38,7 @@
     "scripts": {
         "infection": "roave-infection-static-analysis-plugin",
         "psalm": "psalm",
+        "robo": "robo",
         "test": "phpunit --testdox",
         "test-watch": "phpunit-watcher watch"
     }
