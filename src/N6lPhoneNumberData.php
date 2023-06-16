@@ -14,12 +14,12 @@ use RuntimeException;
 
 final class N6lPhoneNumberData implements N6lPhoneNumberDataInterface
 {
-    public const NO_REPLACEMENT_EXCEPTION_MESSAGE =
-        'Country {country} does not have a replacement';
     public const COUNTRY_NOT_FOUND_EXCEPTION_MESSAGE =
         'Country {country} not found in list of national phone number formats';
     public const INVALID_DATA_EXCEPTION_MESSAGE
         = '`$n6lPhoneNumberData` must be an array of national phone number data, a path to a file that returns an array of national phone number data, or `null` to use local data';
+    public const NO_REPLACEMENT_EXCEPTION_MESSAGE =
+        'Country {country} does not have a replacement';
 
     public function __construct(private array|string|null $n6lPhoneNumberData = null)
     {
