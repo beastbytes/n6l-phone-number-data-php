@@ -29,7 +29,7 @@ final class N6lPhoneNumberData implements N6lPhoneNumberDataInterface
             $this->n6lPhoneNumberData = require $this->n6lPhoneNumberData;
         }
 
-        if (!is_array($this->n6lPhoneNumberData) || count($this->n6lPhoneNumberData) === 0) {
+        if (!is_array($this->n6lPhoneNumberData)) {
             throw new InvalidArgumentException(self::INVALID_DATA_EXCEPTION_MESSAGE);
         }
     }

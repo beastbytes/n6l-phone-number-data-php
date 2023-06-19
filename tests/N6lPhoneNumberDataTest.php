@@ -167,7 +167,6 @@ class N6LPhoneNumberDataTest extends TestCase
     {
         foreach (
             [
-                'array',
                 'null',
                 'string'
             ] as $name
