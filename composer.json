@@ -15,7 +15,7 @@
     "prefer-stable": true,
     "require": {
         "php": "^8.0",
-        "beastbytes/n6l-phone-number-data": "^1.0"
+        "beastbytes/n6l-phone-number-data": "^2.0"
     },
     "require-dev": {
         "consolidation/robo": "^4.0",
