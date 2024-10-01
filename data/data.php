@@ -1,906 +1,2304 @@
 <?php
 /**
- * Patterns used to validate national phone numbers indexed by
+ * Country definitions indexed by
  * {@link https://www.iso.org/iso-3166-country-codes.html ISO 3166-1 alpha-2 country code}
  *
- * Patterns are derived from {@link https://www.itu.int/oth/T0202.aspx?parent=T0202 National Numbering Plans}.
+ * @psalm-type N6L = array{
+ *     pattern: string, // Regex to match input formats derived from {@link https://www.itu.int/oth/T0202.aspx?parent=T0202 National Numbering Plans}
+ *     replacement?: string // Replacement to create nationally formatted number
+ * }
  *
- * A country definition is an array. The 'pattern' key is required; its value is the regex to match the country's
- * national phone numbers. The 'replacement' key is optional; if present its value is the replacement string for
- * preg_replace() to format the phone number to a standard format for that country
+ * @psalm-type EPP = array{
+ *     pattern?: string, // Regex to match unwanted characters in a nationally formatted number
+ *     idc: string // International Dialling Code
+ * }
+ *
+ * @psalm-return array{
+ *     string, // {@link https://www.iso.org/iso-3166-country-codes.html ISO 3166-1 alpha-2 country code}
+ *     array{n6l: N6L,  epp: EPP}
+ * }
  */
+
 return [
     'AD' => [ // Andorra
-        'pattern' => '/^(([3678]\d{2})|(690))[-. ]?(\d{3})(?(3)[-. ]?(\d{3}))/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(([3678]\d{2})|(690))[-. ]?(\d{3})(?(3)[-. ]?(\d{3}))/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/^\D/',
+            'idc' => '376',
+        ]
     ],
     'AE' => [ // United Arab Emirates
-        'pattern' => '/^0(([234679])|(5[02568]))((?(2)[2-8]\d{2}(?<!00)\d{4}|(?(3)\d{7})))/',
+        'n6l' => [
+            'pattern' => '/^0(([234679])|(5[02568]))((?(2)[2-8]\d{2}(?<!00)\d{4}|(?(3)\d{7})))/',
+        ],
+        'epp' => [
+            'pattern' => '/^0/',
+            'idc' => '971',
+        ]
     ],
     'AF' => [ // Afghanistan
-        'pattern' => '/^\(?(0\d{2})\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^\(?(0\d{2})\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/^\D/',
+            'idc' => '93',
+        ]
     ],
     'AG' => [ // Antigua and Barbuda (US numbering plan)
-        'pattern' => '/^\(?(268)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '($1) $2-$3'
+        'n6l' => [
+            'pattern' => '/^\(?(268)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/^\D/',
+            'idc' => '1',
+        ]
     ],
     'AI' => [ // Anguilla (US numbering plan)
-        'pattern' => '/^\(?(264)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '($1) $2-$3'
+        'n6l' => [
+            'pattern' => '/^\(?(264)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '1',
+        ]
     ],
     'AL' => [ // Albania
-        'pattern' => '/^(\d{4})[-. ]?(\d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{4})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '355',
+        ]
     ],
     'AM' => [ // Armenia
-        'pattern' => '/^\d{8}/',
+        'n6l' => [
+            'pattern' => '/^\d{8}/',
+        ],
+        'epp' => [
+            'idc' => '374',
+        ]
     ],
     'AO' => [  // Angola
-        'pattern' => '/^(\d{3})[-. ]?(\d{3})[-. ]?(\d{3})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(\d{3})[-. ]?(\d{3})[-. ]?(\d{3})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '244',
+        ]
     ],
     'AR' => [ // Argentina
-        'pattern' => '/^\d{10}/',
+        'n6l' => [
+            'pattern' => '/^\d{10}/',
+        ],
+        'epp' => [
+            'idc' => '54',
+        ]
     ],
     'AS' => [ // American Samoa (US numbering plan)
-        'pattern' => '/^\(?(684)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '($1) $2-$3'
+        'n6l' => [
+            'pattern' => '/^\(?(684)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '1',
+        ]
     ],
     'AT' => [ // Austria
-        'pattern' => '/^(\d{3})[-. ]?(\d{3})[-. ]?(\d{3})([-. ]?(\d{3}))?([-. ]?(\d{3}))?/',
-        'replacement' => '$1 $2 $3 $5 $7'
+        'n6l' => [
+            'pattern' => '/^(\d{3})[-. ]?(\d{3})[-. ]?(\d{3})([-. ]?(\d{3}))?([-. ]?(\d{3}))?/',
+            'replacement' => '$1 $2 $3 $5 $7',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '43',
+        ]
     ],
     'AU' => [ // Australia
-        'pattern' => '/^\d{9}/',
+        'n6l' => [
+            'pattern' => '/^\d{9}/',
+        ],
+        'epp' => [
+            'idc' => '61',
+        ]
     ],
     'AW' => [ // Aruba
-        'pattern' => '/^\d{7}/',
+        'n6l' => [
+            'pattern' => '/^\d{7}/',
+        ],
+        'epp' => [
+            'idc' => '297',
+        ]
     ],
     'AX' => [ // Åland Islands (Finnish numbering plan)
-        'pattern' => '/^\d{7,11}/',
+        'n6l' => [
+            'pattern' => '/^\d{7,11}/',
+        ],
+        'epp' => [
+            'idc' => '358',
+        ]
     ],
     'AZ' => [ // Azerbaijan
-        'pattern' => '/^\d{9}/',
+        'n6l' => [
+            'pattern' => '/^\d{9}/',
+        ],
+        'epp' => [
+            'idc' => '994',
+        ]
     ],
     'BA' => [ // Bosnia and Herzegovina
-        'pattern' => '/^\d{6,9}/',
+        'n6l' => [
+            'pattern' => '/^\d{6,9}/',
+        ],
+        'epp' => [
+            'idc' => '387',
+        ]
     ],
     'BB' => [ // Barbados (US numbering plan)
-        'pattern' => '/^\(?(246)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '($1) $2-$3'
+        'n6l' => [
+            'pattern' => '/^\(?(246)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '1'
+        ]
     ],
     'BD' => [ // Bangladesh
-        'pattern' => '/^0\d{10,11}/',
+        'n6l' => [
+            'pattern' => '/^0\d{10,11}/',
+        ],
+        'epp' => [
+            'pattern' => '/^0/',
+            'idc' => '880',
+        ]
     ],
     'BE' => [ // Belgium
-        'pattern' => '/^0\d{8,9}/',
+        'n6l' => [
+            'pattern' => '/^0\d{8,9}/',
+        ],
+        'epp' => [
+            'pattern' => '/^0/',
+            'idc' => '32',
+        ]
     ],
     'BF' => [ // Burkina Faso
-        'pattern' => '/^\d{8}/',
+        'n6l' => [
+            'pattern' => '/^\d{8}/',
+        ],
+        'epp' => [
+            'idc' => '226',
+        ]
     ],
     'BG' => [ // Bulgaria
-        'pattern' => '/^\d{8,9}/',
+        'n6l' => [
+            'pattern' => '/^\d{8,9}/',
+        ],
+        'epp' => [
+            'idc' => '359',
+        ]
     ],
     'BH' => [ // Bahrain
-        'pattern' => '/^\d{8}/',
+        'n6l' => [
+            'pattern' => '/^\d{8}/',
+        ],
+        'epp' => [
+            'idc' => '973',
+        ]
     ],
     'BI' => [ // Burundi
-        'pattern' => '/^\d{8}/',
+        'n6l' => [
+            'pattern' => '/^\d{8}/',
+        ],
+        'epp' => [
+            'idc' => '257',
+        ]
     ],
     'BJ' => [ // Benin
-        'pattern' => '/^\d{8}/',
+        'n6l' => [
+            'pattern' => '/^\d{8}/',
+        ],
+        'epp' => [
+            'idc' => '229',
+        ]
     ],
     'BL' => [ // Saint Barthélemy (French numbering plan)
-        'pattern' => '/^(0[1-9])[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})/',
-        'replacement' => '$1 $2 $3 $4'
+        'n6l' => [
+            'pattern' => '/^(0[1-9])[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})/',
+            'replacement' => '$1 $2 $3 $4'
+        ],
+        'epp' => [
+            'pattern' => '/^0|\D/',
+            'idc' => '590',
+        ]
     ],
     'BM' => [ // Bermuda (US numbering plan)
-        'pattern' => '/^\(?(441)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '($1) $2-$3'
+        'n6l' => [
+            'pattern' => '/^\(?(441)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '1',
+        ]
     ],
     'BN' => [ // Brunei
-        'pattern' => '/^(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '673',
+        ]
     ],
     'BO' => [ // Bolivia
-        'pattern' => '/^\d{8}/',
+        'n6l' => [
+            'pattern' => '/^\d{8}/',
+        ],
+        'epp' => [
+            'idc' => '591',
+        ]
     ],
     'BQ' => [ // Bonaire, Sint Eustatius and Saba
-        'pattern' => '/^([347]\d{2})[-. ]?(\d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^([347]\d{2})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '599',
+        ]
     ],
     'BR' => [ // Brazil
-        'pattern' => '/^(\d{2})[-. ]?(\d{4,5})[-. ]?(\d{4})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(\d{2})[-. ]?(\d{4,5})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '55',
+        ]
     ],
     'BS' => [ // The Bahamas (US numbering plan)
-        'pattern' => '/^\(?(242)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '($1) $2-$3'
+        'n6l' => [
+            'pattern' => '/^\(?(242)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '1',
+        ]
     ],
     'BT' => [ // Bhutan
-        'pattern' => '/^(\d)[-. ]?(\d{2})[-. ]?(\d{4})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(\d)[-. ]?(\d{2})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '975',
+        ]
     ],
     'BV' => [ // Bouvet Island (Norwegian numbering plan)
-        'pattern' => '/^(\d{2})[-. ]?(\d{2})[-. ]?(d{2})[-. ]?(d{2})/',
-        'replacement' => '$1 $2 $3 $4'
+        'n6l' => [
+            'pattern' => '/^(\d{2})[-. ]?(\d{2})[-. ]?(d{2})[-. ]?(d{2})/',
+            'replacement' => '$1 $2 $3 $4',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '47',
+        ]
     ],
     'BW' => [ // Botswana
-        'pattern' => '/^\d{7,8}/',
+        'n6l' => [
+            'pattern' => '/^\d{7,8}/',
+        ],
+        'epp' => [
+            'idc' => '267',
+        ]
     ],
     'BY' => [ // Belarus
-        'pattern' => '/^\d{6,11}/',
+        'n6l' => [
+            'pattern' => '/^\d{6,11}/',
+        ],
+        'epp' => [
+            'idc' => '375',
+        ]
     ],
     'BZ' => [ // Belize
-        'pattern' => '/^\d{7}/',
+        'n6l' => [
+            'pattern' => '/^\d{7}/',
+        ],
+        'epp' => [
+            'idc' => '501',
+        ]
     ],
     'CA' => [ // Canada (US numbering plan)
-        'pattern' => '/^\(?(\d{3})\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '($1) $2-$3'
+        'n6l' => [
+            'pattern' => '/^\(?(\d{3})\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '1',
+        ]
     ],
     'CC' => [ // Cocos (Keeling) Islands (Australian numbering plan)
-        'pattern' => '/^\d{9}/',
+        'n6l' => [
+            'pattern' => '/^\d{9}/',
+        ],
+        'epp' => [
+            'idc' => '61',
+        ]
     ],
     'CD' => [ // Democratic Republic of the Congo
-        'pattern' => '/^\d{9}/',
+        'n6l' => [
+            'pattern' => '/^\d{9}/',
+        ],
+        'epp' => [
+            'idc' => '243',
+        ]
     ],
     'CF' => [ // Central African Republic
-        'pattern' => '/^(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})/',
-        'replacement' => '$1 $2 $3 $4'
+        'n6l' => [
+            'pattern' => '/^(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})/',
+            'replacement' => '$1 $2 $3 $4',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '236',
+        ]
     ],
     'CG' => [ // Republic of the Congo
-        'pattern' => '/^(\d{2})[-. ]?(\d{3})[-. ]?(\d{2})[-. ]?(\d{2})/',
-        'replacement' => '$1 $2 $3 $4'
+        'n6l' => [
+            'pattern' => '/^(\d{2})[-. ]?(\d{3})[-. ]?(\d{2})[-. ]?(\d{2})/',
+            'replacement' => '$1 $2 $3 $4',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '242',
+        ]
     ],
     'CH' => [ // Switzerland
-        'pattern' => '/^(2[12467]|3[1234]|4[134]|5[12568]|6[12]|7[13456789]|81)[-. ]?(\d{9})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(2[12467]|3[1234]|4[134]|5[12568]|6[12]|7[13456789]|81)[-. ]?(\d{9})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '41',
+        ]
     ],
     'CI' => [ // Ivory Coast / Côte d'Ivoire
-        'pattern' => '/^[02][157]\d{8}/',
+        'n6l' => [
+            'pattern' => '/^[02][157]\d{8}/',
+        ],
+        'epp' => [
+            'idc' => '225',
+        ]
     ],
     'CK' => [ // Cook Islands
-        'pattern' => '/^((2)|(\d{2}))[-. ]?((?(2)\d{5}|(?(3)\d{4})))/',
-        'replacement' => '$1 $4'
+        'n6l' => [
+            'pattern' => '/^((2)|(\d{2}))[-. ]?((?(2)\d{5}|(?(3)\d{4})))/',
+            'replacement' => '$1 $4',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '682',
+        ]
     ],
     'CL' => [ // Chile
-        'pattern' => '/^(\d{3})[-. ]?(\d{3})[-. ]?(\d{3})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(\d{3})[-. ]?(\d{3})[-. ]?(\d{3})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '56',
+        ]
     ],
     'CM' => [ // Cameroon
-        'pattern' => '/^(\d{3})[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})/',
-        'replacement' => '$1 $2 $3 $4'
+        'n6l' => [
+            'pattern' => '/^(\d{3})[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})/',
+            'replacement' => '$1 $2 $3 $4',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '273',
+        ]
     ],
     'CN' => [ // China
-        'pattern' => '/^\d{11}(\d{2})?/',
+        'n6l' => [
+            'pattern' => '/^\d{11}(\d{2})?/',
+        ],
+        'epp' => [
+            'idc' => '86',
+        ]
     ],
     'CO' => [ // Colombia
-        'pattern' => '/^(\d(\d{2})?)[-. ]?\d{7}/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d(\d{2})?)[-. ]?\d{7}/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '57',
+        ]
     ],
     'CR' => [ // Costa Rica
-        'pattern' => '/^(\d{4})[-. ]?\d{4}/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{4})[-. ]?\d{4}/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '506',
+        ]
     ],
     'CU' => [ // Cuba
-        'pattern' => '/^\d{6,8}/',
+        'n6l' => [
+            'pattern' => '/^\d{6,8}/',
+        ],
+        'epp' => [
+            'idc' => '53',
+        ]
     ],
     'CV' => [ // Cape Verde
-        'pattern' => '/^([259]\d{2})[-. ]?(\d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^([259]\d{2})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '238',
+        ]
     ],
     'CW' => [ // Curaçao
-        'pattern' => '/^(9?)[-. ]?([4-8]\d{2})[-. ]?(\d{4})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(9?)[-. ]?([4-8]\d{2})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '5999',
+        ]
     ],
     'CX' => [ // Christmas Island (Australian numbering plan)
-        'pattern' => '/^\d{9}/',
+        'n6l' => [
+            'pattern' => '/^\d{9}/',
+        ],
+        'epp' => [
+            'idc' => '61',
+        ]
     ],
     'CY' => [ // Cyprus
-        'pattern' => '/^\d{8}/',
+        'n6l' => [
+            'pattern' => '/^\d{8}/',
+        ],
+        'epp' => [
+            'idc' => '357',
+        ]
     ],
     'CZ' => [ // Czech Republic
-        'pattern' => '/^\d{9}/',
+        'n6l' => [
+            'pattern' => '/^\d{9}/',
+        ],
+        'epp' => [
+            'idc' => '420',
+        ]
     ],
     'DE' => [ // Germany
-        'pattern' => '/^(0(15\d{2}|16[23]|17[0-57-9])|(15\d{3})|(160)|(176)|([2-9]\d{2})|([2-9]\d{3})|([2-9]\d{4})|(30|69|89))[-. ]?((?(2)\d{7}|(?(3)\d{6}|(?(4)\d{7,8}|(?(5)\d{8}|(?(6)\d{3,8}|(?(7)\d{2,7}|(?(8)\d{1,6}|(?(9)\d{3,9})))))))))/',
-        'replacement' => '$1 $10'
+        'n6l' => [
+            'pattern' => '/^(0(15\d{2}|16[23]|17[0-57-9])|(15\d{3})|(160)|(176)|([2-9]\d{2})|([2-9]\d{3})|([2-9]\d{4})|(30|69|89))[-. ]?((?(2)\d{7}|(?(3)\d{6}|(?(4)\d{7,8}|(?(5)\d{8}|(?(6)\d{3,8}|(?(7)\d{2,7}|(?(8)\d{1,6}|(?(9)\d{3,9})))))))))/',
+            'replacement' => '$1 $10',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '49',
+        ]
     ],
     'DJ' => [ // Djibouti
-        'pattern' => '/^(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})/',
-        'replacement' => '$1 $2 $3 $4'
+        'n6l' => [
+            'pattern' => '/^(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})/',
+            'replacement' => '$1 $2 $3 $4',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '253',
+        ]
     ],
-    'DK' => [ // Djibouti
-        'pattern' => '/^(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})/',
-        'replacement' => '$1 $2 $3 $4'
+    'DK' => [ // Denmark
+        'n6l' => [
+            'pattern' => '/^(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})/',
+            'replacement' => '$1 $2 $3 $4',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '45',
+        ]
     ],
     'DM' => [ // Dominica (US numbering plan)
-        'pattern' => '/^\(?(767)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '($1) $2-$3'
+        'n6l' => [
+            'pattern' => '/^\(?(767)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '1',
+        ]
     ],
     'DO' => [ // Dominican Republic (US numbering plan)
-        'pattern' => '/^\(?(809|829|849)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '($1) $2-$3'
+        'n6l' => [
+            'pattern' => '/^\(?(809|829|849)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '1',
+        ]
     ],
     'DZ' => [ // Algeria
-        'pattern' => '/^(0\d{1,2})[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})?/',
-        'replacement' => '$1 $2 $3 $4 $5'
+        'n6l' => [
+            'pattern' => '/^(0\d{1,2})[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})?/',
+            'replacement' => '$1 $2 $3 $4 $5',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '213',
+        ]
     ],
     'EC' => [ // Ecuador
-        'pattern' => '/^\d{7,8}/',
+        'n6l' => [
+            'pattern' => '/^\d{7,8}/',
+        ],
+        'epp' => [
+            'idc' => '593',
+        ]
     ],
     'EE' => [ // Estonia
-        'pattern' => '/^\d{8}/',
+        'n6l' => [
+            'pattern' => '/^\d{8}/',
+        ],
+        'epp' => [
+            'idc' => '372',
+        ]
     ],
     'EG' => [ // Egypt
-        'pattern' => '/^\d{9,10}/',
+        'n6l' => [
+            'pattern' => '/^\d{9,10}/',
+        ],
+        'epp' => [
+            'idc' => '20',
+        ]
     ],
     'EH' => [ // Western Sahara (Moroccan numbering plan)
-        'pattern' => '/^(0528[89])[-. ]?(\d{5})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(0528[89])[-. ]?(\d{5})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '212',
+        ]
     ],
     'ER' => [ // Eritrea
-        'pattern' => '/^(0[17])[-. ](\d{3})[-. ](\d{3})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(0[17])[-. ](\d{3})[-. ](\d{3})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '291',
+        ]
     ],
     'ES' => [ // Spain
-        'pattern' => '/^((6\d{2}|[78][1-9]\d|9[1-8]\d))[-. ](\d{3})[-. ](\d{3})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^((6\d{2}|[78][1-9]\d|9[1-8]\d))[-. ](\d{3})[-. ](\d{3})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '34',
+        ]
     ],
     'ET' => [ // Ethiopia
-        'pattern' => '/^(0\d{2})[-. ](\d{7})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(0\d{2})[-. ](\d{7})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '251',
+        ]
     ],
     'FI' => [ // Finland
-        'pattern' => '/^\d{7,11}/',
+        'n6l' => [
+            'pattern' => '/^\d{7,11}/',
+        ],
+        'epp' => [
+            'idc' => '358',
+        ]
     ],
     'FJ' => [ // Fiji
-        'pattern' => '/^[3689]\d{6}/',
+        'n6l' => [
+            'pattern' => '/^[3689]\d{6}/',
+        ],
+        'epp' => [
+            'idc' => '679',
+        ]
     ],
     'FK' => [ // Falkland Islands
-        'pattern' => '/^[2-9]\d{4}/',
+        'n6l' => [
+            'pattern' => '/^[2-9]\d{4}/',
+        ],
+        'epp' => [
+            'idc' => '500',
+        ]
     ],
     'FM' => [ // Micronesia
-        'pattern' => '/^(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '391',
+        ]
     ],
     'FO' => [ // Faroe Islands
-        'pattern' => '/^(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '298',
+        ]
     ],
     'FR' => [ // France - use '^(0[1-9])(([-. ]?\d{2}){4})' if only match is needed
-        'pattern' => '/^(0[1-9])[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})/',
-        'replacement' => '$1 $2 $3 $4'
+        'n6l' => [
+            'pattern' => '/^(0[1-9])[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})/',
+            'replacement' => '$1 $2 $3 $4',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '33',
+        ]
     ],
     'GA' => [ // Gabon
-        'pattern' => '/^(0\d{2})[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})/',
-        'replacement' => '$1 $2 $3 $4'
+        'n6l' => [
+            'pattern' => '/^(0\d{2})[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})/',
+            'replacement' => '$1 $2 $3 $4',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '241',
+        ]
     ],
     'GB' => [ // United Kingdom
-        'pattern' => '/^((\()?)(0\d{2,4})(?(2)\))([-. ]?((\d){3,4}))([-. ]?((\d){3,4}))(?:[-. ]?(x|#).+)?/',
-        'replacement' => '$3 $5$8 $10'
+        'n6l' => [
+            'pattern' => '/^((\()?)(0\d{2,4})(?(2)\))([-. ]?((\d){3,4}))([-. ]?((\d){3,4}))(?:[-. ]?(x|#).+)?/',
+            'replacement' => '$3 $5$8 $10',
+        ],
+        'epp' => [
+            'pattern' => '/^0|\D/',
+            'idc' => '44',
+        ]
     ],
     'GD' => [ // Grenada (US numbering plan)
-        'pattern' => '/^\(?(473)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '($1) $2-$3'
+        'n6l' => [
+            'pattern' => '/^\(?(473)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '1',
+        ]
     ],
     'GE' => [ // Georgia
-        'pattern' => '/^\d{9}/',
+        'n6l' => [
+            'pattern' => '/^\d{9}/',
+        ],
+        'epp' => [
+            'idc' => '995',
+        ]
     ],
     'GF' => [ // French Guiana
-        'pattern' => '/^\d{9}/',
+        'n6l' => [
+            'pattern' => '/^\d{9}/',
+        ],
+        'epp' => [
+            'idc' => '594',
+        ]
     ],
     'GG' => [ // Guernsey (GB numbering plan)
-        'pattern' => '/^((\()?)(0\d{2,4})(?(2)\))([-. ]?((\d){3,4}))([-. ]?((\d){3,4}))(?:[-. ]?(x|#).+)?/',
-        'replacement' => '$3 $5$8 $10'
+        'n6l' => [
+            'pattern' => '/^((\()?)(0\d{2,4})(?(2)\))([-. ]?((\d){3,4}))([-. ]?((\d){3,4}))(?:[-. ]?(x|#).+)?/',
+            'replacement' => '$3 $5$8 $10',
+        ],
+        'epp' => [
+            'pattern' => '/^0|\D/',
+            'idc' => '44',
+        ]
     ],
     'GH' => [ // Ghana
-        'pattern' => '/^(\d{2})[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(\d{2})[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '233',
+        ]
     ],
     'GI' => [ // Gibraltar
-        'pattern' => '/^\d{8}/',
+        'n6l' => [
+            'pattern' => '/^\d{8}/',
+        ],
+        'epp' => [
+            'idc' => '350',
+        ]
     ],
     'GL' => [ // Greenland
-        'pattern' => '/^(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '299',
+        ]
     ],
     'GM' => [ // Gambia
-        'pattern' => '/^(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '220',
+        ]
     ],
     'GN' => [ // Guinea
-        'pattern' => '/^(\d{3})[-. ]?(\d{3})[-. ]?(\d{3})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(\d{3})[-. ]?(\d{3})[-. ]?(\d{3})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '',
+        ]
     ],
     'GP' => [ // Guadeloupe
-        'pattern' => '/^\d{9}/',
+        'n6l' => [
+            'pattern' => '/^\d{9}/',
+        ],
+        'epp' => [
+            'idc' => '590',
+        ]
     ],
     'GQ' => [ // Equatorial Guinea
-        'pattern' => '/^\d{9}/',
+        'n6l' => [
+            'pattern' => '/^\d{9}/',
+        ],
+        'epp' => [
+            'idc' => '240',
+        ]
     ],
     'GR' => [ // Greece
-        'pattern' => '/^\d{10}/',
+        'n6l' => [
+            'pattern' => '/^\d{10}/',
+        ],
+        'epp' => [
+            'idc' => '30',
+        ]
     ],
     'GS' => [ // South Georgia and the South Sandwich Islands
-        'pattern' => '/^\d{5}/',
+        'n6l' => [
+            'pattern' => '/^\d{5}/',
+        ],
+        'epp' => [
+            'idc' => '500',
+        ]
     ],
     'GT' => [ // Guatemala
-        'pattern' => '/^([24-7])[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^([24-7])[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '502',
+        ]
     ],
     'GU' => [ // Guam (US numbering plan)
-        'pattern' => '/^\(?(671)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '($1) $2-$3'
+        'n6l' => [
+            'pattern' => '/^\(?(671)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '1',
+        ]
     ],
     'GW' => [ // Guinea-Bissau
-        'pattern' => '/^((44)|(9[5-7]))[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^((44)|(9[5-7]))[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '245',
+        ]
     ],
     'GY' => [ // Guyana
-        'pattern' => '/^(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '592',
+        ]
     ],
     'HK' => [ // Hong Kong
-        'pattern' => '/^(\d{4})[-. ]?(\d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{4})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '852',
+        ]
     ],
     'HM' => [ // Heard Island and McDonald Islands
-        'pattern' => '/^(0\d{3})[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '$1-$2-$3'
+        'n6l' => [
+            'pattern' => '/^(0\d{3})[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1-$2-$3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '672',
+        ]
     ],
     'HN' => [ // Honduras
-        'pattern' => '/^([237-9])[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^([237-9])[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '504',
+        ]
     ],
     'HR' => [ // Croatia
-        'pattern' => '/^\d{6,10}/',
+        'n6l' => [
+            'pattern' => '/^\d{6,10}/',
+        ],
+        'epp' => [
+            'idc' => '385',
+        ]
     ],
     'HT' => [ // Haiti
-        'pattern' => '/^(\d{4})[-. ]?(\d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{4})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '509',
+        ]
     ],
     'HU' => [ // Hungary
-        'pattern' => '/^(06)?[-. ]?(\d{1,2})[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '$1 $2 $3 $4'
+        'n6l' => [
+            'pattern' => '/^(06)?[-. ]?(\d{1,2})[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3 $4',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '36',
+        ]
     ],
     'ID' => [ // Indonesia
-        'pattern' => '/^\d{11,12}/',
+        'n6l' => [
+            'pattern' => '/^\d{11,12}/',
+        ],
+        'epp' => [
+            'idc' => '62',
+        ]
     ],
     'IE' => [ // Ireland
-        'pattern' => '/^0\d{6,10}/',
+        'n6l' => [
+            'pattern' => '/^0\d{6,10}/',
+        ],
+        'epp' => [
+            'idc' => '353',
+        ]
     ],
     'IL' => [ // Israel
-        'pattern' => '/^\d{8,9}/',
+        'n6l' => [
+            'pattern' => '/^\d{8,9}/',
+        ],
+        'epp' => [
+            'idc' => '972',
+        ]
     ],
     'IM' => [ // Isle of Man (GB numbering plan)
-        'pattern' => '/^((\()?)(0\d{2,4})(?(2)\))([-. ]?((\d){3,4}))([-. ]?((\d){3,4}))(?:[-. ]?(x|#).+)?/',
-        'replacement' => '$3 $5$8 $10'
+        'n6l' => [
+            'pattern' => '/^((\()?)(0\d{2,4})(?(2)\))([-. ]?((\d){3,4}))([-. ]?((\d){3,4}))(?:[-. ]?(x|#).+)?/',
+            'replacement' => '$3 $5$8 $10',
+        ],
+        'epp' => [
+            'pattern' => '/^0|\D/',
+            'idc' => '44',
+        ]
     ],
     'IN' => [ // India
-        'pattern' => '/^\d{10}/',
+        'n6l' => [
+            'pattern' => '/^\d{10}/',
+        ],
+        'epp' => [
+            'idc' => '91',
+        ]
     ],
     'IO' => [ // British Indian Ocean Territory
-        'pattern' => '/^(3[78]\d)[-. ]?(\d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(3[78]\d)[-. ]?(\d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '246',
+        ]
     ],
     'IQ' => [ // Iraq
-        'pattern' => '/^\d{10}/',
+        'n6l' => [
+            'pattern' => '/^\d{10}/',
+        ],
+        'epp' => [
+            'idc' => '964',
+        ]
     ],
     'IR' => [ // Iran
-        'pattern' => '/^\d{5,10}/',
+        'n6l' => [
+            'pattern' => '/^\d{5,10}/',
+        ],
+        'epp' => [
+            'idc' => '98',
+        ]
     ],
     'IS' => [ // Iceland
-        'pattern' => '/^(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '354',
+        ]
     ],
     'IT' => [ // Italy
-        'pattern' => '/^\d{6,10}/',
+        'n6l' => [
+            'pattern' => '/^\d{6,10}/',
+        ],
+        'epp' => [
+            'idc' => '39',
+        ]
     ],
     'JE' => [ // Jersey (GB numbering plan)
-        'pattern' => '/^((\()?)(0\d{2,4})(?(2)\))([-. ]?((\d){3,4}))([-. ]?((\d){3,4}))(?:[-. ]?(x|#).+)?/',
-        'replacement' => '$3 $5$8 $10'
+        'n6l' => [
+            'pattern' => '/^((\()?)(0\d{2,4})(?(2)\))([-. ]?((\d){3,4}))([-. ]?((\d){3,4}))(?:[-. ]?(x|#).+)?/',
+            'replacement' => '$3 $5$8 $10',
+        ],
+        'epp' => [
+            'pattern' => '/^0|\D/',
+            'idc' => '44',
+        ]
     ],
     'JM' => [ // Jamaica (US numbering plan)
-        'pattern' => '/^\(?(658|876)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '($1) $2-$3'
+        'n6l' => [
+            'pattern' => '/^\(?(658|876)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '1',
+        ]
     ],
     'JO' => [ // Jordan
-        'pattern' => '/^\d{8,10}/',
+        'n6l' => [
+            'pattern' => '/^\d{8,10}/',
+        ],
+        'epp' => [
+            'idc' => '962',
+        ]
     ],
     'JP' => [ // Japan
-        'pattern' => '/^\d{9,10}/',
+        'n6l' => [
+            'pattern' => '/^\d{9,10}/',
+        ],
+        'epp' => [
+            'idc' => '81',
+        ]
     ],
     'KE' => [ // Kenya
-        'pattern' => '/^\d{7,12}/',
+        'n6l' => [
+            'pattern' => '/^\d{7,12}/',
+        ],
+        'epp' => [
+            'idc' => '254',
+        ]
     ],
     'KG' => [ // Kyrgyzstan
-        'pattern' => '/^\d{9}/',
+        'n6l' => [
+            'pattern' => '/^\d{9}/',
+        ],
+        'epp' => [
+            'idc' => '996',
+        ]
     ],
     'KH' => [ // Cambodia
-        'pattern' => '/^\d{8}/',
+        'n6l' => [
+            'pattern' => '/^\d{8}/',
+        ],
+        'epp' => [
+            'idc' => '855',
+        ]
     ],
     'KI' => [ // Kiribati
-        'pattern' => '/^\d{8}/',
+        'n6l' => [
+            'pattern' => '/^\d{8}/',
+        ],
+        'epp' => [
+            'idc' => '686',
+        ]
     ],
     'KM' => [ // Comoros
-        'pattern' => '/^\d{7}/',
+        'n6l' => [
+            'pattern' => '/^\d{7}/',
+        ],
+        'epp' => [
+            'idc' => '269',
+        ]
     ],
     'KN' => [ // Saint Kitts and Nevis (US numbering plan)
-        'pattern' => '/^\(?(869)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '($1) $2-$3'
+        'n6l' => [
+            'pattern' => '/^\(?(869)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '1',
+        ]
     ],
     'KP' => [ // North Korea
-        'pattern' => '/^(2((18\d{3})|(((381)|(77[12]))\d{4})|(88[01235])\d{13}))|^(195\d{7})|^(((3[19])|(4[159])|(5[37])|(6[17])|(7[39]))\d{6})|^(8529\d{4})/'
+        'n6l' => [
+            'pattern' => '/^(2((18\d{3})|(((381)|(77[12]))\d{4})|(88[01235])\d{13}))|^(195\d{7})|^(((3[19])|(4[159])|(5[37])|(6[17])|(7[39]))\d{6})|^(8529\d{4})/',
+        ],
+        'epp' => [
+            'idc' => '850',
+        ]
     ],
     'KR' => [ // South Korea
-        'pattern' => '/^\d{8,10}/',
+        'n6l' => [
+            'pattern' => '/^\d{8,10}/',
+        ],
+        'epp' => [
+            'idc' => '82',
+        ]
     ],
     'KW' => [ // Kuwait
-        'pattern' => '/^\d{8}/',
+        'n6l' => [
+            'pattern' => '/^\d{8}/',
+        ],
+        'epp' => [
+            'idc' => '965',
+        ]
     ],
     'KY' => [ // Cayman Islands (US numbering plan)
-        'pattern' => '/^\(?(345)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '($1) $2-$3'
+        'n6l' => [
+            'pattern' => '/^\(?(345)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '1',
+        ]
     ],
     'KZ' => [ // Kazakhstan
-        'pattern' => '/^([67]\d{2})[-. ]?(\d{3})[-. ]?(\d{2})[-. ]?(\d{2})/',
-        'replacement' => '$1 $2-$3-$4'
+        'n6l' => [
+            'pattern' => '/^([67]\d{2})[-. ]?(\d{3})[-. ]?(\d{2})[-. ]?(\d{2})/',
+            'replacement' => '$1 $2-$3-$4',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '7',
+        ]
     ],
     'LA' => [ // Laos
-        'pattern' => '/^(\d{8}|\d{10})/',
+        'n6l' => [
+            'pattern' => '/^(\d{8}|\d{10})/',
+        ],
+        'epp' => [
+            'idc' => '856',
+        ]
     ],
     'LB' => [ // Lebanon
-        'pattern' => '/^\d{7,8}/',
+        'n6l' => [
+            'pattern' => '/^\d{7,8}/',
+        ],
+        'epp' => [
+            'idc' => '961',
+        ]
     ],
     'LC' => [ // Saint Lucia (US numbering plan)
-        'pattern' => '/^\(?(758)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '($1) $2-$3'
+        'n6l' => [
+            'pattern' => '/^\(?(758)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '1',
+        ]
     ],
     'LI' => [ // Liechtenstein
-        'pattern' => '/^(\d{7}|\d{9})/',
+        'n6l' => [
+            'pattern' => '/^(\d{7}|\d{9})/',
+        ],
+        'epp' => [
+            'idc' => '423',
+        ]
     ],
     'LK' => [ // Sri Lanka
-        'pattern' => '/^\d{9,10}/',
+        'n6l' => [
+            'pattern' => '/^\d{9,10}/',
+        ],
+        'epp' => [
+            'idc' => '94',
+        ]
     ],
     'LR' => [ // Liberia
-        'pattern' => '/^\(?(?|(33)|(55)|(77)|(88))\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '($1) $2 $3'
+        'n6l' => [
+            'pattern' => '/^\(?(?|(33)|(55)|(77)|(88))\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '($1) $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '231',
+        ]
     ],
     'LS' => [ // Lesotho
-        'pattern' => '/^(\d{2})[-. ]?(\d{3})[-. ]?(\d{3})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(\d{2})[-. ]?(\d{3})[-. ]?(\d{3})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '266',
+        ]
     ],
     'LT' => [ // Lithuania
-        'pattern' => '/^([3-9]\d{,2})[-. ]?(\d{2,3})[-. ]?(\d{3,4})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^([3-9]\d{,2})[-. ]?(\d{2,3})[-. ]?(\d{3,4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '370',
+        ]
     ],
     'LU' => [ // Luxembourg
-        'pattern' => '/^\d{6,9}/',
+        'n6l' => [
+            'pattern' => '/^\d{6,9}/',
+        ],
+        'epp' => [
+            'idc' => '352',
+        ]
     ],
     'LV' => [ // Latvia
-        'pattern' => '/^(\d{4})[-. ]?(\d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{4})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '371',
+        ]
     ],
     'LY' => [ // Libya
-        'pattern' => '/^\d{8,9}/',
+        'n6l' => [
+            'pattern' => '/^\d{8,9}/',
+        ],
+        'epp' => [
+            'idc' => '218',
+        ]
     ],
     'MA' => [ // Morocco
-        'pattern' => '/^(0\d{4})[-. ]?(\d{5})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(0\d{4})[-. ]?(\d{5})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '212',
+        ]
     ],
     'MC' => [ // Monaco
-        'pattern' => '/^(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2,3})/',
-        'replacement' => '$1 $2 $3 $4'
+        'n6l' => [
+            'pattern' => '/^(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2,3})/',
+            'replacement' => '$1 $2 $3 $4',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '377',
+        ]
     ],
     'MD' => [ // Moldova
-        'pattern' => '/^(\d{4})[-. ]?(\d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{4})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '373',
+        ]
     ],
     'ME' => [ // Montenegro
-        'pattern' => '/^(0\d{2})[-. ]?(\d{3})[-. ]?(\d{3})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(0\d{2})[-. ]?(\d{3})[-. ]?(\d{3})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '382',
+        ]
     ],
     'MF' => [ // Saint Martin (French part)
-        'pattern' => '/^(0)[-. ]?(5[69]0)[-. ]?(\d{6})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(0)[-. ]?(5[69]0)[-. ]?(\d{6})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '590',
+        ]
     ],
     'MG' => [ // Madagascar
-        'pattern' => '/^(0\d{2})[-. ]?(d{2})[-. ]?(\d{5})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(0\d{2})[-. ]?(d{2})[-. ]?(\d{5})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '261',
+        ]
     ],
-    'MH' =>  [ // Marshall Islands
-        'pattern' => '/^(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '$1 $2'
+    'MH' => [ // Marshall Islands
+        'n6l' => [
+            'pattern' => '/^(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '692',
+        ]
     ],
     'MK' => [ // Macedonia
-        'pattern' => '/^(0\d{2})[-. ]?(d{3})[-. ]?(\d{3})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(0\d{2})[-. ]?(d{3})[-. ]?(\d{3})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '389',
+        ]
     ],
     'ML' => [ // Mali
-        'pattern' => '/^(\d{2})[-. ]?(d{2})[-. ]?(\d{2})[-. ]?(\d{2})/',
-        'replacement' => '$1 $2 $3 $4'
+        'n6l' => [
+            'pattern' => '/^(\d{2})[-. ]?(d{2})[-. ]?(\d{2})[-. ]?(\d{2})/',
+            'replacement' => '$1 $2 $3 $4',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '223',
+        ]
     ],
     'MM' => [ // Myanmar
-        'pattern' => '/^\d{9,10}/',
+        'n6l' => [
+            'pattern' => '/^\d{9,10}/',
+        ],
+        'epp' => [
+            'idc' => '95',
+        ]
     ],
     'MN' => [ // Mongolia
-        'pattern' => '/^(\d{2})[-. ]?(d{3})[-. ]?(\d{3})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(\d{2})[-. ]?(d{3})[-. ]?(\d{3})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '976',
+        ]
     ],
     'MO' => [ // Macau
-        'pattern' => '/^(\d{4})[-. ]?(d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{4})[-. ]?(d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '853',
+        ]
     ],
     'MP' => [ // Northern Mariana Islands (US numbering plan)
-        'pattern' => '/^\(?(670)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '($1) $2-$3'
+        'n6l' => [
+            'pattern' => '/^\(?(670)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '1',
+        ]
     ],
     'MQ' => [ // Martinique
-        'pattern' => '/^\d{9}/',
+        'n6l' => [
+            'pattern' => '/^\d{9}/',
+        ],
+        'epp' => [
+            'idc' => '596',
+        ]
     ],
     'MR' => [ // Mauritania
-        'pattern' => '/^(\d{4})[-. ]?(d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{4})[-. ]?(d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '222',
+        ]
     ],
     'MS' => [ // Montserrat (US numbering plan)
-        'pattern' => '/^\(?(664)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '($1) $2-$3'
+        'n6l' => [
+            'pattern' => '/^\(?(664)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '1',
+        ]
     ],
     'MT' => [ // Malta
-        'pattern' => '/^(\d{4})[-. ]?(d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{4})[-. ]?(d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '356',
+        ]
     ],
     'MU' => [ // Mauritius
-        'pattern' => '/^(\d{4})[-. ]?(d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{4})[-. ]?(d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '230',
+        ]
     ],
     'MV' => [ // Maldives
-        'pattern' => '/^(\d{3})[-. ]?(d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{3})[-. ]?(d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '960',
+        ]
     ],
     'MW' => [ // Malawi
-        'pattern' => '/^\d{8,12}/',
+        'n6l' => [
+            'pattern' => '/^\d{8,12}/',
+        ],
+        'epp' => [
+            'idc' => '265',
+        ]
     ],
     'MX' => [ // Mexico
-        'pattern' => '/^(\d{2})[-. ]?(\d{4})[-. ]?(d{4})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(\d{2})[-. ]?(\d{4})[-. ]?(d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '52',
+        ]
     ],
     'MY' => [ // Malaysia
-        'pattern' => '/^\d{10,11}/',
+        'n6l' => [
+            'pattern' => '/^\d{10,11}/',
+        ],
+        'epp' => [
+            'idc' => '60',
+        ]
     ],
     'MZ' => [ // Mozambique
-        'pattern' => '/^\d{8,9}/',
+        'n6l' => [
+            'pattern' => '/^\d{8,9}/',
+        ],
+        'epp' => [
+            'idc' => '258',
+        ]
     ],
     'NA' => [ // Namibia
-        'pattern' => '/^\d{9}/',
+        'n6l' => [
+            'pattern' => '/^\d{9}/',
+        ],
+        'epp' => [
+            'numeric' => '516',
+        ]
     ],
     'NC' => [ // New Caledonia
-        'pattern' => '/^(\d{3})[-. ]?(d{3})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{3})[-. ]?(d{3})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '687',
+        ]
     ],
     'NE' => [ // Niger
-        'pattern' => '/^(\d{2})[-. ]?(\d{2})[-. ]?(d{2})[-. ]?(d{2})/',
-        'replacement' => '$1 $2 $3 $4'
+        'n6l' => [
+            'pattern' => '/^(\d{2})[-. ]?(\d{2})[-. ]?(d{2})[-. ]?(d{2})/',
+            'replacement' => '$1 $2 $3 $4',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '227',
+        ]
     ],
     'NF' => [ // Norfolk Island
-        'pattern' => '/^(\d{2})[-. ]?(d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{2})[-. ]?(d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '672',
+        ]
     ],
     'NG' => [ // Nigeria
-        'pattern' => '/^\d{9,11}/',
+        'n6l' => [
+            'pattern' => '/^\d{9,11}/',
+        ],
+        'epp' => [
+            'idc' => '234',
+        ]
     ],
     'NI' => [ // Nicaragua
-        'pattern' => '/^(\d{4})[-. ]?(d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{4})[-. ]?(d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '505',
+        ]
     ],
     'NL' => [ // Netherlands
-        'pattern' => '/^(\d{3})[-. ]?(\d{4})[-. ]?(d{4})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(\d{3})[-. ]?(\d{4})[-. ]?(d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '31',
+        ]
     ],
     'NO' => [ // Norway
-        'pattern' => '/^(\d{2})[-. ]?(\d{2})[-. ]?(d{2})[-. ]?(d{2})/',
-        'replacement' => '$1 $2 $3 $4'
+        'n6l' => [
+            'pattern' => '/^(\d{2})[-. ]?(\d{2})[-. ]?(d{2})[-. ]?(d{2})/',
+            'replacement' => '$1 $2 $3 $4',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '47',
+        ]
     ],
     'NP' => [ // Nepal
-        'pattern' => '/^(\d{1})[-. ]?(\d{4})[-. ]?(d{3})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(\d{1})[-. ]?(\d{4})[-. ]?(d{3})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '977',
+        ]
     ],
     'NR' => [ // Nauru
-        'pattern' => '/^(\d{3})[-. ]?(d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{3})[-. ]?(d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '674',
+        ]
     ],
     'NU' => [ // Niue
-        'pattern' => '/^(\d{3})[-. ]?(d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{3})[-. ]?(d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '683',
+        ]
     ],
     'NZ' => [ // New Zealand
-        'pattern' => '/^\d{8,10}/',
+        'n6l' => [
+            'pattern' => '/^\d{8,10}/',
+        ],
+        'epp' => [
+            'idc' => '64',
+        ]
     ],
     'OM' => [ // Oman
-        'pattern' => '/^\d{8}/',
+        'n6l' => [
+            'pattern' => '/^\d{8}/',
+        ],
+        'epp' => [
+            'idc' => '968',
+        ]
     ],
     'PA' => [ // Panama
-        'pattern' => '/^(6?\d{3})[-. ]?(d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(6?\d{3})[-. ]?(d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '507',
+        ]
     ],
     'PE' => [ // Peru
-        'pattern' => '/^[09]\d{6,8}/',
+        'n6l' => [
+            'pattern' => '/^[09]\d{6,8}/',
+        ],
+        'epp' => [
+            'idc' => '51',
+        ]
     ],
     'PF' => [ // French Polynesia
-        'pattern' => '/^(\d{2})[-. ]?(\d{2})[-. ]?(d{2})[-. ]?(d{2})/',
-        'replacement' => '$1 $2 $3 $4'
+        'n6l' => [
+            'pattern' => '/^(\d{2})[-. ]?(\d{2})[-. ]?(d{2})[-. ]?(d{2})/',
+            'replacement' => '$1 $2 $3 $4',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '689',
+        ]
     ],
     'PG' => [ // Papua New Guinea
-        'pattern' => '/^(\d{4})[-. ]?(d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{4})[-. ]?(d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '675',
+        ]
     ],
     'PH' => [ // Philippines
-        'pattern' => '/^(0((2)|(9)\d{2}|(\d{2})))[-. ]?((?(3)\d{4}|\d{3}))[-. ]?(\d{4})/',
-        'replacement' => '$1-$6-$7'
+        'n6l' => [
+            'pattern' => '/^(0((2)|(9)\d{2}|(\d{2})))[-. ]?((?(3)\d{4}|\d{3}))[-. ]?(\d{4})/',
+            'replacement' => '$1-$6-$7',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '63',
+        ]
     ],
     'PK' => [ // Pakistan
-        'pattern' => '/^\(?(0\d{2,4})\)?[-. ]?(\d{7,8})/',
-        'replacement' => '($1) $2'
+        'n6l' => [
+            'pattern' => '/^\(?(0\d{2,4})\)?[-. ]?(\d{7,8})/',
+            'replacement' => '($1) $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '92',
+        ]
     ],
     'PL' => [ // Poland
-        'pattern' => '/^(\d{2})[-. ]?(d{7})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{2})[-. ]?(d{7})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '48',
+        ]
     ],
     'PM' => [ // Saint Pierre and Miquelon
-        'pattern' => '/^(\d{1})[-. ](\d{2})[-. ](\d{2})[-. ](\d{2})[-. ]?(d{2})/',
-        'replacement' => '$1 $2 $3 $4 $5'
+        'n6l' => [
+            'pattern' => '/^(\d{1})[-. ](\d{2})[-. ](\d{2})[-. ](\d{2})[-. ]?(d{2})/',
+            'replacement' => '$1 $2 $3 $4 $5',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '508',
+        ]
     ],
     'PN' => [ // Pitcairn Islands (New Zealand numbering plan)
-        'pattern' => '/^\d{8,10}/',
+        'n6l' => [
+            'pattern' => '/^\d{8,10}/',
+        ],
+        'epp' => [
+            'idc' => '64',
+        ]
     ],
     'PR' => [ // Puerto Rico (US numbering plan)
-        'pattern' => '/^\(?(787|939)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '($1) $2-$3'
+        'n6l' => [
+            'pattern' => '/^\(?(787|939)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '1',
+        ]
     ],
     'PS' => [ // State of Palestine
-        'pattern' => '/^(\d{2,3})[-. ](\d{3})[-. ](\d{4})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(\d{2,3})[-. ](\d{3})[-. ](\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '970',
+        ]
     ],
     'PT' => [ // Portugal
-        'pattern' => '/^(\d{3})[-. ](\d{3})[-. ](\d{3})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(\d{3})[-. ](\d{3})[-. ](\d{3})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '351',
+        ]
     ],
     'PW' => [ // Palau
-        'pattern' => '/^(\d{3})[-. ]?(d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{3})[-. ]?(d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '680',
+        ]
     ],
     'PY' => [ // Paraguay
-        'pattern' => '/^(\d{3})[-. ](\d{3})[-. ](\d{3})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(\d{3})[-. ](\d{3})[-. ](\d{3})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '595',
+        ]
     ],
     'QA' => [ // Qatar
-        'pattern' => '/^(\d{4})[-. ]?(d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{4})[-. ]?(d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '947',
+        ]
     ],
     'RE' => [ // Réunion (French numbering plan)
-        'pattern' => '/^(0[1-9])[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})/',
-        'replacement' => '$1 $2 $3 $4'
+        'n6l' => [
+            'pattern' => '/^(0[1-9])[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})/',
+            'replacement' => '$1 $2 $3 $4',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '262',
+        ]
     ],
     'RO' => [ // Romania
-        'pattern' => '/^\d{6,9}/',
+        'n6l' => [
+            'pattern' => '/^\d{6,9}/',
+        ],
+        'epp' => [
+            'idc' => '40',
+        ]
     ],
     'RS' => [ // Serbia
-        'pattern' => '/^\d{6,12}/',
+        'n6l' => [
+            'pattern' => '/^\d{6,12}/',
+        ],
+        'epp' => [
+            'idc' => '381',
+        ]
     ],
     'RU' => [ // Russia
-        'pattern' => '/^([3-589]\d{2})[-. ]?(\d{3})[-. ]?(\d{2})[-. ]?(\d{2})/',
-        'replacement' => '$1 $2-$3-$4'
+        'n6l' => [
+            'pattern' => '/^([3-589]\d{2})[-. ]?(\d{3})[-. ]?(\d{2})[-. ]?(\d{2})/',
+            'replacement' => '$1 $2-$3-$4',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '7',
+        ]
     ],
     'RW' => [ // Rwanda
-        'pattern' => '/^(\d{3})[-. ](\d{3})[-. ](\d{3})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(\d{3})[-. ](\d{3})[-. ](\d{3})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '250',
+        ]
     ],
     'SA' => [ // Saudi Arabia
-        'pattern' => '/^\d{9,12}/',
+        'n6l' => [
+            'pattern' => '/^\d{9,12}/',
+        ],
+        'epp' => [
+            'idc' => '966',
+        ]
     ],
     'SB' => [ // Solomon Islands
-        'pattern' => '/^(\d{5}|\d{7})/',
+        'n6l' => [
+            'pattern' => '/^(\d{5}|\d{7})/',
+        ],
+        'epp' => [
+            'idc' => '677',
+        ]
     ],
     'SC' => [ // Seychelles
-        'pattern' => '/^(\d{1})[-. ](\d{3})[-. ](\d{3})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(\d{1})[-. ](\d{3})[-. ](\d{3})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '248',
+        ]
     ],
     'SD' => [ // Sudan
-        'pattern' => '/^\d{9}/',
+        'n6l' => [
+            'pattern' => '/^\d{9}/',
+        ],
+        'epp' => [
+            'idc' => '249',
+        ]
     ],
     'SE' => [ // Sweden
-        'pattern' => '/^0\d{6, 12}/',
+        'n6l' => [
+            'pattern' => '/^0\d{6, 12}/',
+        ],
+        'epp' => [
+            'idc' => '46',
+        ]
     ],
     'SG' => [ // Singapore
-        'pattern' => '/^(\d{4})[-. ]?(d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{4})[-. ]?(d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '65',
+        ]
     ],
     'SH' => [ // Saint Helena, Ascension and Tristan da Cunha
-        'pattern' => '/^\d{5}/',
+        'n6l' => [
+            'pattern' => '/^\d{5}/',
+        ],
+        'epp' => [
+            'idc' => '290',
+        ]
     ],
     'SI' => [ // Slovenia
-        'pattern' => '/^(0\d{1})[-. ]?(\d{3})[-. ]?(d{2})[-. ]?(d{2})/',
-        'replacement' => '$1 $2 $3 $4'
+        'n6l' => [
+            'pattern' => '/^(0\d{1})[-. ]?(\d{3})[-. ]?(d{2})[-. ]?(d{2})/',
+            'replacement' => '$1 $2 $3 $4',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '386',
+        ]
     ],
     'SJ' => [ // Svalbard and Jan Mayen (Norwegian numbering plan)
-        'pattern' => '/^(79)[-. ]?(\d{2})[-. ]?(d{2})[-. ]?(d{2})/',
-        'replacement' => '$1 $2 $3 $4'
+        'n6l' => [
+            'pattern' => '/^(79)[-. ]?(\d{2})[-. ]?(d{2})[-. ]?(d{2})/',
+            'replacement' => '$1 $2 $3 $4',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '47',
+        ]
     ],
     'SK' => [ // Slovakia
-        'pattern' => '/^\d{12}/',
+        'n6l' => [
+            'pattern' => '/^\d{12}/',
+        ],
+        'epp' => [
+            'idc' => '421',
+        ]
     ],
     'SL' => [ // Sierra Leone
-        'pattern' => '/^(\d{2})[-. ]?(\d{3})[-. ]?(d{3})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(\d{2})[-. ]?(\d{3})[-. ]?(d{3})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '232',
+        ]
     ],
     'SM' => [ // San Marino
-        'pattern' => '/^\d{6,10}/',
+        'n6l' => [
+            'pattern' => '/^\d{6,10}/',
+        ],
+        'epp' => [
+            'idc' => '378',
+        ]
     ],
     'SN' => [ // Senegal
-        'pattern' => '/^(\d{2})[-. ]?(\d{3})[-. ]?(d{4})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(\d{2})[-. ]?(\d{3})[-. ]?(d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '221',
+        ]
     ],
     'SO' => [ // Somalia
-        'pattern' => '/^\d{6,9}/',
+        'n6l' => [
+            'pattern' => '/^\d{6,9}/',
+        ],
+        'epp' => [
+            'idc' => '252',
+        ]
     ],
     'SR' => [ // Suriname
-        'pattern' => '/^\d{6,7}/',
+        'n6l' => [
+            'pattern' => '/^\d{6,7}/',
+        ],
+        'epp' => [
+            'idc' => '597',
+        ]
     ],
     'SS' => [ // South Sudan
-        'pattern' => '/^(\d{2})[-. ]?(\d{3})[-. ]?(d{4})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(\d{2})[-. ]?(\d{3})[-. ]?(d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '211',
+        ]
     ],
     'ST' => [ // São Tomé and Príncipe
-        'pattern' => '/^(\d{3})[-. ]?(d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{3})[-. ]?(d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '239',
+        ]
     ],
     'SV' => [ // El Salvador
-        'pattern' => '/^(\d{4})[-. ]?(d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{4})[-. ]?(d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '503',
+        ]
     ],
     'SX' => [ // Sint Maarten (US numbering plan)
-        'pattern' => '/^\(?(721)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '($1) $2-$3'
+        'n6l' => [
+            'pattern' => '/^\(?(721)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '1',
+        ]
     ],
     'SY' => [ // Syria
-        'pattern' => '/^(0\d{3})[-. ]?(\d{4})[-. ]?(d{3})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(0\d{3})[-. ]?(\d{4})[-. ]?(d{3})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '963',
+        ]
     ],
     'SZ' => [ // Eswatini
-        'pattern' => '/^\d{8}/',
+        'n6l' => [
+            'pattern' => '/^\d{8}/',
+        ],
+        'epp' => [
+            'idc' => '268',
+        ]
     ],
     'TC' => [ // Turks and Caicos Islands (US numbering plan)
-        'pattern' => '/^\(?(649)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '($1) $2-$3'
+        'n6l' => [
+            'pattern' => '/^\(?(649)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '1',
+        ]
     ],
     'TD' => [ // Chad
-        'pattern' => '/^(\d{2})[-. ]?(\d{2})[-. ]?(d{2})[-. ]?(d{2})/',
-        'replacement' => '$1 $2 $3 $4'
+        'n6l' => [
+            'pattern' => '/^(\d{2})[-. ]?(\d{2})[-. ]?(d{2})[-. ]?(d{2})/',
+            'replacement' => '$1 $2 $3 $4',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '235',
+        ]
     ],
     'TG' => [ // Togo
-        'pattern' => '/^(\d{2})[-. ]?(\d{2})[-. ]?(d{2})[-. ]?(d{2})/',
-        'replacement' => '$1 $2 $3 $4'
+        'n6l' => [
+            'pattern' => '/^(\d{2})[-. ]?(\d{2})[-. ]?(d{2})[-. ]?(d{2})/',
+            'replacement' => '$1 $2 $3 $4',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '228',
+        ]
     ],
     'TH' => [ // Thailand
-        'pattern' => '/^\d{8,9}/',
+        'n6l' => [
+            'pattern' => '/^\d{8,9}/',
+        ],
+        'epp' => [
+            'idc' => '66',
+        ]
     ],
     'TJ' => [ // Tajikistan
-        'pattern' => '/^(\d{2})[-. ]?(\d{3})[-. ]?(d{4})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(\d{2})[-. ]?(\d{3})[-. ]?(d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '992',
+        ]
     ],
     'TK' => [ // Tokelau
-        'pattern' => '/^\d{4,7}/',
+        'n6l' => [
+            'pattern' => '/^\d{4,7}/',
+        ],
+        'epp' => [
+            'idc' => '690',
+        ]
     ],
     'TL' => [ // East Timor / Timor-Leste
-        'pattern' => '/^(\d{3,4})[-. ]?(\d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{3,4})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '670',
+        ]
     ],
     'TM' => [ // Turkmenistan
-        'pattern' => '/^(8)[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(d{2})[-. ]?(d{2})/',
-        'replacement' => '$1-$2-$3-$4-$5'
-    ], // Turkmenistan
-    'TN' => [ // Tunisia
-        'pattern' => '/^(\d{2})[-. ]?(\d{3})[-. ]?(d{3})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(8)[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(d{2})[-. ]?(d{2})/',
+            'replacement' => '$1-$2-$3-$4-$5',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '993',
+        ]
     ],
-    'TO' => [ // Tonga7
-        'pattern' => '/^(\d{5})|(d{7})/',
+    'TN' => [ // Tunisia
+        'n6l' => [
+            'pattern' => '/^(\d{2})[-. ]?(\d{3})[-. ]?(d{3})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '216',
+        ]
+    ],
+    'TO' => [ // Tonga
+        'n6l' => [
+            'pattern' => '/^(\d{5})|(d{7})/',
+        ],
+        'epp' => [
+            'idc' => '676',
+        ]
     ],
     'TR' => [ // Turkey
-        'pattern' => '/^(\d{3})[-. ]?(\d{3})[-. ]?(d{2})[-. ]?(d{2})/',
-        'replacement' => '$1 $2 $3 $4'
+        'n6l' => [
+            'pattern' => '/^(\d{3})[-. ]?(\d{3})[-. ]?(d{2})[-. ]?(d{2})/',
+            'replacement' => '$1 $2 $3 $4',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '90',
+        ]
     ],
     'TT' => [ // Trinidad and Tobago (US numbering plan)
-        'pattern' => '/^\(?(868)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '($1) $2-$3'
+        'n6l' => [
+            'pattern' => '/^\(?(868)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '1',
+        ]
     ],
     'TV' => [ // Tuvalu
-        'pattern' => '/^(\d{5,7})/',
+        'n6l' => [
+            'pattern' => '/^(\d{5,7})/',
+        ],
+        'epp' => [
+            'idc' => '688',
+        ]
     ],
     'TW' => [ // Taiwan
-        'pattern' => '/^(\d{8,9})/',
+        'n6l' => [
+            'pattern' => '/^(\d{8,9})/',
+        ],
+        'epp' => [
+            'idc' => '886',
+        ]
     ],
     'TZ' => [ // Tanzania
-        'pattern' => '/^(\d{9})/',
+        'n6l' => [
+            'pattern' => '/^(\d{9})/',
+        ],
+        'epp' => [
+            'idc' => '255',
+        ]
     ],
     'UA' => [ // Ukraine
-        'pattern' => '/^(\d{2})[-. ]?(\d{3})[-. ]?(d{2})[-. ]?(d{2})/',
-        'replacement' => '$1 $2 $3 $4'
+        'n6l' => [
+            'pattern' => '/^(\d{2})[-. ]?(\d{3})[-. ]?(d{2})[-. ]?(d{2})/',
+            'replacement' => '$1 $2 $3 $4',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '380',
+        ]
     ],
     'UG' => [ // Uganda
-        'pattern' => '/^(\d{2})[-. ]?(\d{3})[-. ]?(d{4})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(\d{2})[-. ]?(\d{3})[-. ]?(d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '256',
+        ]
     ],
     'UM' => [ // United States Minor Outlying Islands (US numbering plan)
-        'pattern' => '/^\(?(\d{3})\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '($1) $2-$3'
+        'n6l' => [
+            'pattern' => '/^\(?(\d{3})\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '1',
+        ]
     ],
     'US' => [ // United States of America
-        'pattern' => '/^\(?(\d{3})\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '($1) $2-$3'
+        'n6l' => [
+            'pattern' => '/^\(?(\d{3})\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '1',
+        ]
     ],
     'UY' => [ // Uruguay
-        'pattern' => '/^(\d{4})[-. ]?(d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{4})[-. ]?(d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '598',
+        ]
     ],
     'UZ' => [ // Uzbekistan
-        'pattern' => '/^(\d{2})[-. ]?(d{7})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{2})[-. ]?(d{7})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '998',
+        ]
     ],
     'VA' => [ // Vatican City / Holy See
-        'pattern' => '/^(06)[-. ]?(698\d{5})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(06)[-. ]?(698\d{5})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '379',
+        ]
     ],
     'VC' => [ // Saint Vincent and the Grenadines (US numbering plan)
-        'pattern' => '/^\(?(784)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '($1) $2-$3'
+        'n6l' => [
+            'pattern' => '/^\(?(784)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '1',
+        ]
     ],
     'VE' => [ // Venezuela
-        'pattern' => '/^(\d{3})[-. ](\d{3})[-. ](\d{4})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(\d{3})[-. ](\d{3})[-. ](\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '58',
+        ]
     ],
     'VG' => [ // British Virgin Islands (US numbering plan)
-        'pattern' => '/^\(?(284)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '($1) $2-$3'
+        'n6l' => [
+            'pattern' => '/^\(?(284)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '1',
+        ]
     ],
     'VI' => [ // United States Virgin Islands (US numbering plan)
-        'pattern' => '/^\(?(340)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
-        'replacement' => '($1) $2-$3'
+        'n6l' => [
+            'pattern' => '/^\(?(340)\)?[-. ]?(\d{3})[-. ]?(\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '1',
+        ]
     ],
     'VN' => [ // Vietnam
-        'pattern' => '/^(\d{5})[-. ](\d{4})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{5})[-. ](\d{4})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '84',
+        ]
     ],
     'VU' => [ // Vanuatu
-        'pattern' => '/^\d{3,7}/',
+        'n6l' => [
+            'pattern' => '/^\d{3,7}/',
+        ],
+        'epp' => [
+            'idc' => '678',
+        ]
     ],
     'WF' => [ // Wallis and Futuna
-        'pattern' => '/^(\d{3})[-. ](\d{3})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{3})[-. ](\d{3})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '681',
+        ]
     ],
     'WS' => [ // Samoa
-        'pattern' => '/^\d{5,7}/',
+        'n6l' => [
+            'pattern' => '/^\d{5,7}/',
+        ],
+        'epp' => [
+            'idc' => '685',
+        ]
     ],
     'YE' => [ // Yemen
-        'pattern' => '/^(\d{1,3})[-. ](\d{3})[-. ](\d{3})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(\d{1,3})[-. ](\d{3})[-. ](\d{3})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '967',
+        ]
     ],
     'YT' => [ // Mayotte (French numbering plan)
-        'pattern' => '/^(0[1-9])[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})/',
-        'replacement' => '$1 $2 $3 $4'
+        'n6l' => [
+            'pattern' => '/^(0[1-9])[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})[-. ]?(\d{2})/',
+            'replacement' => '$1 $2 $3 $4',
+        ],
+        'epp' => [
+            'pattern' => '/^0|\D/',
+            'idc' => '262',
+        ]
     ],
     'ZA' => [ // South Africa
-        'pattern' => '/^(0\d{2})[-. ](\d{3})[-. ](\d{4})/',
-        'replacement' => '$1 $2 $3'
+        'n6l' => [
+            'pattern' => '/^(0\d{2})[-. ](\d{3})[-. ](\d{4})/',
+            'replacement' => '$1 $2 $3',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '27',
+        ]
     ],
     'ZM' => [ // Zambia
-        'pattern' => '/^(\d{3})[-. ](\d{6})/',
-        'replacement' => '$1 $2'
+        'n6l' => [
+            'pattern' => '/^(\d{3})[-. ](\d{6})/',
+            'replacement' => '$1 $2',
+        ],
+        'epp' => [
+            'pattern' => '/\D/',
+            'idc' => '260',
+        ]
     ],
     'ZW' => [ // Zimbabwe
-        'pattern' => '/^\d{9,10}/',
+        'n6l' => [
+            'pattern' => '/^\d{9,10}/',
+        ],
+        'epp' => [
+            'idc' => '263',
+        ]
     ],
 ];
-
