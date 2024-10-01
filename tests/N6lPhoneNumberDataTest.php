@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright © 2023 BeastBytes - All rights reserved
+ * @copyright Copyright © 2024 BeastBytes - All rights reserved
  * @license BSD 3-Clause
  */
 
@@ -15,7 +15,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
-class N6LPhoneNumberDataTest extends TestCase
+class N6lPhoneNumberDataTest extends TestCase
 {
     private static string $dataFilename;
     private static array $n6lPhoneNumberData;
@@ -28,7 +28,7 @@ class N6LPhoneNumberDataTest extends TestCase
         self::$dataFilename = dirname(__DIR__) . '/data/data.php';
     }
 
-    public function test_constructor_with_null()
+    public function test_constructor_with_null(): void
     {
         $n6lPhoneNumberData = new N6lPhoneNumberData();
         $this->assertCount(
@@ -37,7 +37,7 @@ class N6LPhoneNumberDataTest extends TestCase
         );
     }
 
-    public function test_constructor_with_string()
+    public function test_constructor_with_string(): void
     {
         $n6lPhoneNumberData = new N6lPhoneNumberData(
             self::$dataFilename
@@ -48,7 +48,7 @@ class N6LPhoneNumberDataTest extends TestCase
         );
     }
 
-    public function test_constructor_with_array()
+    public function test_constructor_with_array(): void
     {
         $data = $this->getData();
 
@@ -60,7 +60,7 @@ class N6LPhoneNumberDataTest extends TestCase
     }
 
     #[DataProvider('badDataProvider')]
-    public function test_bad_constructor($data)
+    public function test_bad_constructor(string $data): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(N6lPhoneNumberData::INVALID_DATA_EXCEPTION_MESSAGE);
@@ -68,42 +68,37 @@ class N6LPhoneNumberDataTest extends TestCase
     }
 
     #[DataProvider('goodCountriesProvider')]
-    public function test_has_country($country)
+    public function test_has_country(string $country): void
     {
         $this->assertTrue(self::$testClass->hasCountry($country));
     }
 
     #[DataProvider('badCountriesProvider')]
-    public function test_does_not_have_country($country)
+    public function test_does_not_have_country(string $country): void
     {
         $this->assertFalse(self::$testClass->hasCountry($country));
     }
 
     #[DataProvider('goodCountriesProvider')]
-    public function test_get_pattern($country)
+    public function test_n6l(string $country): void
     {
-        $this->assertSame(self::$n6lPhoneNumberData[$country]['pattern'], self::$testClass->getPattern($country));
+        $this->assertSame(
+            self::$n6lPhoneNumberData[$country]['n6l'],
+            self::$testClass->getN6l($country)
+        );
     }
 
     #[DataProvider('goodCountriesProvider')]
-    public function test_replacement($country, $hasReplacement)
+    public function test_epp($country)
     {
-        $this->assertSame($hasReplacement, self::$testClass->hasReplacement($country));
-
-        if ($hasReplacement) {
-            $this->assertSame(self::$n6lPhoneNumberData[$country]['replacement'], self::$testClass->getReplacement($country));
-        } else {
-            $this->expectException(RuntimeException::class);
-            $this->expectExceptionMessage(strtr(
-                N6lPhoneNumberData::NO_REPLACEMENT_EXCEPTION_MESSAGE,
-                ['{country}' => $country]
-            ));
-            self::$testClass->getReplacement($country);
-        }
+        $this->assertSame(
+            self::$n6lPhoneNumberData[$country]['epp'],
+            self::$testClass->getEpp($country)
+        );
     }
 
     #[DataProvider('badCountriesProvider')]
-    public function test_bad_countries_pattern($country)
+    public function test_bad_countries_n6l(string $country): void
     {
         $this->assertFalse(self::$testClass->hasCountry($country));
 
@@ -114,29 +109,20 @@ class N6LPhoneNumberDataTest extends TestCase
                 ['{country}' => $country]
             )
         );
-        self::$testClass->getPattern($country);
+        self::$testClass->getN6l($country);
     }
 
     #[DataProvider('badCountriesProvider')]
-    public function test_bad_countries_has_replacement($country)
+    public function test_bad_countries_epp(string $country): void
     {
+        $this->assertFalse(self::$testClass->hasCountry($country));
+
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(strtr(
             N6lPhoneNumberData::COUNTRY_NOT_FOUND_EXCEPTION_MESSAGE,
             ['{country}' => $country]
         ));
-        self::$testClass->hasReplacement($country);
-    }
-
-    #[DataProvider('badCountriesProvider')]
-    public function test_bad_countries_get_replacement($country)
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage(strtr(
-            N6lPhoneNumberData::COUNTRY_NOT_FOUND_EXCEPTION_MESSAGE,
-            ['{country}' => $country]
-        ));
-        self::$testClass->getReplacement($country);
+        self::$testClass->getEpp($country);
     }
 
     public static function goodCountriesProvider(): \Generator
@@ -180,7 +166,10 @@ class N6LPhoneNumberDataTest extends TestCase
         $data = [];
 
         self::$n6lPhoneNumberData = require dirname(__DIR__) . '/data/data.php';
-        $countries = array_rand(self::$n6lPhoneNumberData, random_int(1, count(self::$n6lPhoneNumberData)));
+        $countries = array_rand(
+            self::$n6lPhoneNumberData,
+            random_int(1, count(self::$n6lPhoneNumberData))
+        );
 
         foreach ($countries as $country) {
             $data[$country] = self::$n6lPhoneNumberData[$country];
