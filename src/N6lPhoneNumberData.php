@@ -1,7 +1,17 @@
 <?php
 /**
- * @copyright Copyright © 2023 BeastBytes - All rights reserved
+ * @copyright Copyright © 2024 BeastBytes - All rights reserved
  * @license BSD 3-Clause
+ *
+ * @psalm-type N6L = array{
+ *      pattern: string, // Regex to match input formats derived from {@link https://www.itu.int/oth/T0202.aspx?parent=T0202 National Numbering Plans}
+ *      replacement?: string // Replacement to create nationally formatted number
+ *  }
+ *
+ * @psalm-type EPP = array{
+ *      pattern?: string, // Regex to match unwanted characters in a nationally formatted number
+ *      idc: string // International Dialling Code
+ *  }
  */
 
 declare(strict_types=1);
@@ -10,7 +20,6 @@ namespace BeastBytes\PhoneNumber\N6l\PHP;
 
 use BeastBytes\PhoneNumber\N6l\N6lPhoneNumberDataInterface;
 use InvalidArgumentException;
-use RuntimeException;
 
 final class N6lPhoneNumberData implements N6lPhoneNumberDataInterface
 {
@@ -18,11 +27,10 @@ final class N6lPhoneNumberData implements N6lPhoneNumberDataInterface
         'Country {country} not found in list of national phone number formats';
     public const INVALID_DATA_EXCEPTION_MESSAGE
         = '`$n6lPhoneNumberData` must be an array of national phone number data, a path to a file that returns an array of national phone number data, or `null` to use local data';
-    public const NO_REPLACEMENT_EXCEPTION_MESSAGE =
-        'Country {country} does not have a replacement';
 
     public function __construct(private array|string|null $n6lPhoneNumberData = null)
     {
+        /** @psalm-suppress MissingFile, MixedAssignment, UnresolvableInclude */
         if ($this->n6lPhoneNumberData === null) {
             $this->n6lPhoneNumberData = require dirname(__DIR__) . '/data/data.php';
         } elseif (is_string($this->n6lPhoneNumberData)) {
@@ -34,6 +42,10 @@ final class N6lPhoneNumberData implements N6lPhoneNumberDataInterface
         }
     }
 
+    /**
+     * @return string[]
+     * @psalm-return list<string>
+     */
     public function getCountries(): array
     {
         return array_keys($this->n6lPhoneNumberData);
@@ -44,10 +56,13 @@ final class N6lPhoneNumberData implements N6lPhoneNumberDataInterface
         return array_key_exists($country, $this->n6lPhoneNumberData);
     }
 
-    public function getPattern(string $country): string
+    /**
+     * @psalm-return EPP
+     */
+    public function getEpp(string $country): array
     {
         if ($this->hasCountry($country)) {
-            return $this->n6lPhoneNumberData[$country]['pattern'];
+            return $this->n6lPhoneNumberData[$country]['epp'];
         }
 
         throw new InvalidArgumentException(strtr(
@@ -56,30 +71,18 @@ final class N6lPhoneNumberData implements N6lPhoneNumberDataInterface
         ));
     }
 
-    public function getReplacement(string $country): string
+    /**
+     * @psalm-return N6L
+     */
+    public function getN6l(string $country): array
     {
-        if (!$this->hasReplacement($country)) {
-            throw new RuntimeException(strtr(
-                self::NO_REPLACEMENT_EXCEPTION_MESSAGE,
-                ['{country}' => $country]
-            ));
+        if ($this->hasCountry($country)) {
+            return $this->n6lPhoneNumberData[$country]['n6l'];
         }
 
-        return $this->n6lPhoneNumberData[$country]['replacement'];
-    }
-
-    public function hasReplacement(string $country): bool
-    {
-        if (!$this->hasCountry($country)) {
-            throw new InvalidArgumentException(strtr(
-                self::COUNTRY_NOT_FOUND_EXCEPTION_MESSAGE,
-                ['{country}' => $country]
-            ));
-        }
-
-        return array_key_exists(
-            'replacement',
-            $this->n6lPhoneNumberData[$country]
-        );
+        throw new InvalidArgumentException(strtr(
+            self::COUNTRY_NOT_FOUND_EXCEPTION_MESSAGE,
+            ['{country}' => $country]
+        ));
     }
 }
