@@ -1,6 +1,11 @@
 # N6l Phone Number Data PHP (n6l-phone-number-data-php)
 Implementation of n6l-phone-number-data to retrieve national phone number formatting data from PHP storage.
 
+n6l-phone-number-data implementations are used by:
+* [phone-number-validator](https://github.com/beastbytes/phone-number-validator) to validate national phone numbers
+* [phone-number-helper](https://github.com/beastbytes/phone-number-helper) to convert national phone numbers to
+  [Extensible Provisioning Protocol (EPP) format](https://www.rfc-editor.org/rfc/rfc4933.html#section-2.5)
+
 For license information see the [LICENSE](LICENSE.md) file.
 
 ## Installation
